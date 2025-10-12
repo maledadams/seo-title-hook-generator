@@ -106,3 +106,7 @@ Instagram Reels Hooks,How to write hooks for IG reels,instagram hooks,shorts scr
 * Titles are template driven and will not match every brand voice
 * Power words list is safe and short by design
 * Scores guide review and are not a promise of CTR gains
+
+##License
+
+MIT
