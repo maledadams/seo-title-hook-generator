@@ -28,7 +28,7 @@ if exist requirements.txt (
   python -m pip install streamlit pandas numpy
 )
 
-python -m streamlit run app.py
+python -m streamlit run app.py --server.port 0
 
 set "RC=%ERRORLEVEL%"
 echo.
