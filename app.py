@@ -350,26 +350,6 @@ def title_templates(topic: str, current: str, kw_list: List[str], genre: str, br
     out = dedupe_titles_fast(out)
     return out[:24]
 
-def hook_templates(topic: str, kw_list: List[str], genre: str) -> List[str]:
-    base = (kw_list[0] if kw_list else topic).lower()
-    hooks = GENRE_HOOK_TEMPLATES.get(genre, [])
-    if not hooks:
-        hooks = [
-            "You can fix this faster than you think.",
-            "Skip fluff. Here is the working path.",
-            "Small steps. Real lift.",
-        ]
-    out = []
-    seen = set()
-    for h in hooks:
-        h = h.format(base=base)
-        h = re.sub(r"\s+", " ", h).strip()
-        if h and h not in seen:
-            out.append(h)
-            seen.add(h)
-    return out[:10]
-
-
 # Overall scoring
 
 def overall_title_score(title: str, current: str, kw_list: List[str], genre: str, weights: Dict[str, float]) -> Tuple[float, Dict[str, float]]:
@@ -508,9 +488,6 @@ for ix, row in subset.iterrows():
         continue
     df["row_index"] = [ix] * len(df)
     rows_out.append(df)
-
-    hooks = hook_templates(topic, kw_list, genre)
-    hooks_out.append({"row_index": ix, "hooks": hooks, "topic": topic})
 
     progress.progress((len(rows_out)) / max(1, len(subset)))
 
