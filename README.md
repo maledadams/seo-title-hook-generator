@@ -1,0 +1,2 @@
+# SEO-title-and-hook-rewriter-that-scores-candidates-from-a-CSV-and-exports-top-picks
+This app reads a CSV with topic, current_title, and keywords, then generates new title options and short hooks. It scores every candidate on keyword coverage, length fit, novelty vs current, power words, and light penalties for shouting and redundancy. You get a ranked table, a hooks section, and two downloads for review.
