@@ -8,20 +8,8 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-#############################
-# Streamlit app: SEO Title and Hook Rewriter (fixed + optimized)
-# - Genre picker with power words and templates
-# - Weight presets with optional advanced overrides
-# - Brand terms field to force required words
-# - Precompiled regex and cached tokenization
-# - Fast dedupe signature
-# - Reasons column in outputs
-# - Indexing bug fixed
-#############################
+#genre
 
-# -----------------
-# Power words by genre
-# -----------------
 GENRE_POWER_WORDS: Dict[str, List[str]] = {
     "YouTube": [
         "how to","new","best","free","now","easy","secret","proven","ultimate","mistake","fix","faster",
@@ -91,9 +79,8 @@ EVERGREEN_POWER = [
 
 STOPWORDS = set("a an the of for and or to in on with your you from by at as is are be was were it this that".split())
 
-# -----------------
-# Weight presets per genre
-# -----------------
+# Weight genre
+
 GENRE_WEIGHTS: Dict[str, Dict[str, float]] = {
     "YouTube": {"keyword": 0.27, "length": 0.20, "novelty": 0.23, "power": 0.18, "no_shouting": 0.07, "no_redundancy": 0.05},
     "Blogging/SEO": {"keyword": 0.34, "length": 0.25, "novelty": 0.12, "power": 0.17, "no_shouting": 0.07, "no_redundancy": 0.05},
@@ -117,9 +104,8 @@ GENRE_WEIGHTS: Dict[str, Dict[str, float]] = {
     "Nonprofit/Impact": {"keyword": 0.30, "length": 0.22, "novelty": 0.14, "power": 0.22, "no_shouting": 0.07, "no_redundancy": 0.05},
 }
 
-# -----------------
 # Regex + tokenization
-# -----------------
+
 RE_NONALNUM = re.compile(r"[^a-z0-9 ]+")
 RE_ALLCAPS = re.compile(r"[A-Z]{4,}")
 
@@ -128,9 +114,7 @@ def tokenize_cached(s: str) -> Tuple[str, ...]:
     s = RE_NONALNUM.sub(" ", s.lower())
     return tuple(w for w in s.split() if w and w not in STOPWORDS)
 
-# -----------------
 # Scoring helpers
-# -----------------
 
 def soft_range_score(x: int, low: int, high: int, sweet_low: int, sweet_high: int) -> float:
     if sweet_low <= x <= sweet_high:
@@ -173,9 +157,7 @@ def novelty_score_vs_current(tokens: Tuple[str, ...], current_tokens: Tuple[str,
     j = len(sa & sb) / max(1, len(sa | sb))
     return 1.0 - j
 
-# -----------------
 # Dedupe
-# -----------------
 
 def _sig(tokens: Tuple[str, ...]) -> frozenset:
     t = list(tokens)
@@ -194,9 +176,8 @@ def dedupe_titles_fast(cands: List[str]) -> List[str]:
         out.append(t)
     return out
 
-# -----------------
+
 # Templates
-# -----------------
 
 def base_title_templates(topic: str, kw_list: List[str], year: str) -> List[str]:
     base_kw = (kw_list[0] if kw_list else topic).strip()
@@ -341,112 +322,9 @@ GENRE_TITLE_TEMPLATES: Dict[str, List[str]] = {
     ],
 }
 
-GENRE_HOOK_TEMPLATES: Dict[str, List[str]] = {
-    "YouTube": [
-        "You can fix your {base} in one sitting. Here is the plan.",
-        "I ran this on a small channel and watch time jumped. Do this next.",
-        "If your {base} is stuck, steal this format and run it today.",
-    ],
-    "Blogging/SEO": [
-        "Here is a clean template and examples. Copy what you need.",
-        "Stop guessing keywords. Build a small map that works.",
-        "This outline ranks because it is simple and complete.",
-    ],
-    "E-commerce": [
-        "Replace weak copy with this offer stack and watch drop-off fall.",
-        "Borrow these trust lines. They reduce doubt without fluff.",
-        "Your product page needs fewer words and sharper claims. Try this.",
-    ],
-    "Travel": [
-        "Skip the crowds. This route flows and stays on budget.",
-        "You get three real highlights and no tourist traps.",
-        "These spots are open and easy to reach right now.",
-    ],
-    "Gaming": [
-        "The patch changed everything. Here is the build that wins.",
-        "You can climb if you stop doing this one thing.",
-        "This route saves time and cuts the risk.",
-    ],
-    "Beauty/Fashion": [
-        "Short routine first. Glow after.",
-        "Use these dupes and save money with the same look.",
-        "Capsule pieces keep outfits easy and clean.",
-    ],
-    "Fitness/Health": [
-        "Form first. Then add speed. Here are the cues.",
-        "Low impact plan you can repeat without pain.",
-        "Use a small tracker. Habits build results.",
-    ],
-    "Personal Finance": [
-        "Fee free moves first. Calm beats hype.",
-        "Index and automate. Keep your weekends free.",
-        "Set up one rule that protects you in a downturn.",
-    ],
-    "Tech/Coding": [
-        "Start from scratch and ship a working version.",
-        "Refactor in small steps. Tests protect you.",
-        "Copy the snippet. Then make it yours.",
-    ],
-    "Education/Study": [
-        "Spaced practice keeps what you learn.",
-        "Use this cheat sheet to guide recall, not cram.",
-        "Short walkthrough. Then you try one.",
-    ],
-    "Food/Cooking": [
-        "One pot tonight. Better taste without mess.",
-        "Marinate first. Heat later. Flavor stays.",
-        "Cook once. Eat all week. Here is the plan.",
-    ],
-    "Real Estate": [
-        "Real comps. Clean photos. Fewer days on market.",
-        "Small upgrades. Bigger curb appeal.",
-        "This checklist saves time before showings.",
-    ],
-    "Music/Audio": [
-        "Fix mud and harsh highs with these moves.",
-        "Punchy mix without loudness wars.",
-        "Presets get you close. Ears finish the job.",
-    ],
-    "Podcasts": [
-        "Here are the highlights. Then we dig in.",
-        "Uncut stories with clear takeaways.",
-        "Candid talk. No fluff. Real notes you can use.",
-    ],
-    "Photo/Video": [
-        "Cinematic look with a simple workflow.",
-        "Your footage is close. Grade and export clean.",
-        "Steady handheld without gear. Here is how.",
-    ],
-    "Parenting/Family": [
-        "Lower stress with a steady routine.",
-        "Screen free ideas that hold attention.",
-        "Small changes that make bedtime smooth.",
-    ],
-    "DIY/Crafts": [
-        "Upcycle one thing today. Use what you have.",
-        "No sew trick that looks clean.",
-        "Templates and steps you can print.",
-    ],
-    "Sports": [
-        "Build a small playbook and drill it.",
-        "Breakdowns with clips you can copy.",
-        "Train for consistency, not streaks.",
-    ],
-    "B2B/SaaS": [
-        "Clear outcome, numbers, and one next step.",
-        "Onboarding gets faster when you remove steps.",
-        "Audit ready by default. No drama at quarter end.",
-    ],
-    "Nonprofit/Impact": [
-        "Donor matched window is open now.",
-        "Outcomes first. Keep it transparent.",
-        "Volunteer shifts that make a difference this week.",
-    ],
-}
 
-# -----------------
+
 # Generation core
-# -----------------
 
 def title_templates(topic: str, current: str, kw_list: List[str], genre: str, brand_terms: List[str]) -> List[str]:
     year = time.strftime("%Y")
@@ -491,9 +369,8 @@ def hook_templates(topic: str, kw_list: List[str], genre: str) -> List[str]:
             seen.add(h)
     return out[:10]
 
-# -----------------
+
 # Overall scoring
-# -----------------
 
 def overall_title_score(title: str, current: str, kw_list: List[str], genre: str, weights: Dict[str, float]) -> Tuple[float, Dict[str, float]]:
     title_lc = title.lower()
@@ -527,8 +404,6 @@ def overall_title_score(title: str, current: str, kw_list: List[str], genre: str
     }
     return float(score), parts
 
-# Explain score in plain text
-
 def reasons_from_parts(parts: Dict[str, float]) -> str:
     reasons = []
     if parts.get("keyword", 0) >= 0.66:
@@ -545,9 +420,8 @@ def reasons_from_parts(parts: Dict[str, float]) -> str:
         reasons.append("trimmed repeats")
     return ", ".join(reasons) or "balanced"
 
-# -----------------
+
 # App
-# -----------------
 
 st.set_page_config(page_title="SEO Title and Hook Rewriter", page_icon="📝", layout="wide")
 st.title("SEO Title and Hook Rewriter")
@@ -670,3 +544,4 @@ st.download_button("Download top picks CSV", data=best_csv, file_name=f"title_to
 st.download_button("Download all candidates CSV", data=all_csv, file_name=f"title_candidates_{time.strftime('%Y-%m-%d_%H-%M-%S')}.csv", mime="text/csv")
 
 st.caption("Optimized scoring, genre-aware templates and power words, brand term enforcement, and reasons for picks.")
+
