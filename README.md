@@ -50,7 +50,7 @@ Pick one path. Both work.
    ```
 5. Run the app
    ```bash
-   python -m streamlit run "Seo Title And Hook Rewriter — App"
+   python -m streamlit run app_optimized.py
    ```
 6. Open the browser at `http://localhost:8501`
 
@@ -73,23 +73,6 @@ Use the helper scripts.
 topic,current_title,keywords
 YouTube SEO,My YouTube SEO is not working,youtube seo,video titles,watch time
 Instagram Reels Hooks,How to write hooks for IG reels,instagram hooks,shorts scripts,engagement
-```
-
-Use the larger sample to kick the tires.
-- `sample_titles_large.csv` lives at the repo root
-
-## Screenshots and demo
-These files live in `assets/`.
-
-- `assets/screenshot-top-picks.png`
-- `assets/screenshot-candidates.png`
-- `assets/demo.gif`
-
-Markdown embeds
-```md
-![Top picks](assets/screenshot-top-picks.png)
-![All candidates](assets/screenshot-candidates.png)
-![Demo](assets/demo.gif)
 ```
 
 ## Limits
