@@ -70,7 +70,7 @@ Pick one path. Both work.
 5. Run the app
 
    ```bash
-   python -m streamlit run "Seo Title And Hook Rewriter — App"
+   python -m streamlit run app_optimized.py
    ```
 6. Open the browser at `http://localhost:8501`
 
