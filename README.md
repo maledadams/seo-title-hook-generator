@@ -27,44 +27,7 @@ The app normalizes each title then computes six pieces. Final score is a weighte
 Each row shows the final score and the six sub scores so you can explain picks in review.
 
 ## Run it locally
-Pick one path. Both work.
-
-### Option A
-1. Install Python 3.10 or newer
-2. Open a terminal in the project folder
-3. Create and activate a virtual env
-   - Windows PowerShell
-     ```powershell
-     py -m venv .venv
-     .\.venv\Scripts\Activate.ps1
-     ```
-   - macOS or Linux
-     ```bash
-     python3 -m venv .venv
-     source .venv/bin/activate
-     ```
-4. Install deps
-   ```bash
-   python -m pip install --upgrade pip
-   python -m pip install -r requirements.txt
-   ```
-5. Run the app
-   ```bash
-   python -m streamlit run app_optimized.py
-   ```
-6. Open the browser at `http://localhost:8501`
-
-### Option B
-Use the helper scripts.
-
-- Windows
-  ```powershell
-  .\run.ps1
-  ```
-- macOS or Linux
-  ```bash
-  ./run.sh
-  ```
+in the folder there is a file named Start-App, click on it and wait for the dependencies to download then open the browser at `http://localhost:8501`
 
 ## CSV format
 `keywords` is a comma separated list in a single cell.
