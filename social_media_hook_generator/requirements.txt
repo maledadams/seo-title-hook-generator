@@ -1,0 +1,8 @@
+google-genai
+requests
+flask
+flask-login
+flask-sqlalchemy
+python-dotenv
+tweepy
+psycopg2-binary  # For PostgreSQL support

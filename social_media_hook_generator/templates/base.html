@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Social Media Hook Generator{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="site-shell">
+        <div class="ambient ambient-one"></div>
+        <div class="ambient ambient-two"></div>
+
+        <header class="site-header">
+            <div class="container">
+                <div class="header-bar" data-reveal>
+                    <a href="{{ url_for('index') }}" class="brand">
+                        <span class="brand-mark">Generator</span>
+                        <h1 class="brand-title">Social Media Hook Generator</h1>
+                        <p class="brand-note">Generate and review.</p>
+                    </a>
+
+                    <nav class="site-nav">
+                        {% if current_user.is_authenticated %}
+                            <a href="{{ url_for('dashboard') }}" class="nav-link">Dashboard</a>
+                            <a href="{{ url_for('logout') }}" class="nav-link is-accent">Logout</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                            <a href="{{ url_for('register') }}" class="nav-link is-accent">Register</a>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="container">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div class="flash-stack" data-reveal>
+                    {% for message in messages %}
+                    <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <div id="loadingOverlay" class="loading-overlay" aria-hidden="true">
+            <div class="loading-card">
+                <div class="loading-spinner"></div>
+                <p id="loadingText" class="loading-text">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const nodes = document.querySelectorAll('[data-reveal]');
+            nodes.forEach((node, index) => {
+                window.setTimeout(() => node.classList.add('is-visible'), 80 * index);
+            });
+
+            const overlay = document.getElementById('loadingOverlay');
+            const loadingText = document.getElementById('loadingText');
+            const forms = document.querySelectorAll('form[method="post"], form[method="POST"]');
+
+            forms.forEach((form) => {
+                form.addEventListener('submit', function () {
+                    const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+                    const message = form.dataset.loadingText || 'Loading...';
+
+                    if (submitButton) {
+                        submitButton.disabled = true;
+                        submitButton.classList.add('is-loading');
+                    }
+
+                    if (overlay && loadingText) {
+                        loadingText.textContent = message;
+                        overlay.classList.add('is-active');
+                        overlay.setAttribute('aria-hidden', 'false');
+                    }
+                });
+            });
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

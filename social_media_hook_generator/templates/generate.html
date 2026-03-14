@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Generated Content - Social Media Hook Generator{% endblock %}
+
+{% block content %}
+<section class="section results-layout">
+    <div class="panel" data-reveal>
+        <div class="eyebrow">Result</div>
+        <h2 class="form-heading">{{ content_pack.topic }}</h2>
+        <p class="form-intro">{{ platform|upper }}</p>
+    </div>
+
+    <div class="glass-form" data-reveal>
+        <div class="eyebrow">Actions</div>
+        <h3 class="form-heading">Actions</h3>
+        <p class="form-intro">Save it or generate another.</p>
+        <div class="stack-actions">
+            {% if demo_mode %}
+            <a href="{{ url_for('register') }}" class="button">Register to save</a>
+            <a href="{{ url_for('login') }}" class="button-ghost">Login</a>
+            <a href="{{ url_for('index') }}" class="button-ghost">Generate another</a>
+            {% else %}
+            <form action="{{ url_for('save_pack') }}" method="post" data-loading-text="Saving content pack...">
+                <input type="hidden" name="content_pack" value="{{ content_pack_json }}">
+                <input type="hidden" name="platform" value="{{ platform }}">
+                <button type="submit" class="button">Save content pack</button>
+            </form>
+            <a href="{{ url_for('index') }}" class="button-ghost">Generate another</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section content-stack">
+    {% for platform_name, content in content_pack.platforms.items() %}
+    <article class="content-card" data-reveal>
+        <div class="content-header">
+            <div>
+                <span class="platform-pill">{{ platform_name }}</span>
+            </div>
+            {% if platform_name == platform %}
+            <span class="status-pill">Primary</span>
+            {% endif %}
+        </div>
+
+        <div class="content-grid">
+            <section class="content-panel">
+                <span class="card-label">Hook</span>
+                <p class="copy">{{ content.hook }}</p>
+            </section>
+            <section class="content-panel">
+                <span class="card-label">Body</span>
+                <p class="copy">{{ content.body }}</p>
+            </section>
+        </div>
+
+        <section class="content-panel" style="margin-top: 16px;">
+            <span class="card-label">Hashtags</span>
+            <div class="hashtag-list" style="margin-top: 12px;">
+                {% for hashtag in content.hashtags %}
+                <span class="hashtag">{{ hashtag }}</span>
+                {% endfor %}
+            </div>
+        </section>
+    </article>
+    {% endfor %}
+</section>
+{% endblock %}

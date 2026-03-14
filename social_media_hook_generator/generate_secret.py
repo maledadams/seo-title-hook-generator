@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""
+Generate a secure secret key for Flask applications.
+Run this script to generate a new SECRET_KEY for your .env file.
+"""
+
+import secrets
+import string
+
+def generate_secret_key(length=32):
+    """Generate a cryptographically secure random string."""
+    alphabet = string.ascii_letters + string.digits + string.punctuation
+    return ''.join(secrets.choice(alphabet) for _ in range(length))
+
+if __name__ == "__main__":
+    secret_key = generate_secret_key()
+    print("Generated SECRET_KEY:")
+    print(f"SECRET_KEY={secret_key}")
+    print("\nAdd this to your .env file.")
+    print("Keep this key secure and never commit it to version control!")

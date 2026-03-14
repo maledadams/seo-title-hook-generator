@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Social Media Hook Generator{% endblock %}
+
+{% block content %}
+<section class="section single-column">
+    <div class="auth-card compact-form" data-reveal>
+        <div class="eyebrow">Create Account</div>
+        <h3 class="form-heading">Register</h3>
+        <p class="form-intro">Create an account to save packs.</p>
+
+        <form action="{{ url_for('register') }}" method="post" data-loading-text="Creating account...">
+            <div class="field">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" class="input" required>
+            </div>
+
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" class="input" required>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="input" required>
+            </div>
+
+            <div class="field">
+                <label for="confirm_password">Confirm password</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="input" required>
+            </div>
+
+            <div class="stack-actions">
+                <button type="submit" class="button">Create account</button>
+            </div>
+        </form>
+
+        <div class="link-row" style="margin-top: 18px;">
+            <span>Already registered?</span>
+            <a href="{{ url_for('login') }}" class="link-accent">Login</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

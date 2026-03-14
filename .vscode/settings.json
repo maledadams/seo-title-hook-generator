@@ -1,0 +1,4 @@
+{
+  "python.envFile": "${workspaceFolder}/social_media_hook_generator/.env",
+  "python.terminal.useEnvFile": true
+}

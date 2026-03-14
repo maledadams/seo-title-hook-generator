@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section single-column">
+    <div class="glass-form compact-form" data-reveal>
+        <div class="eyebrow">Generator</div>
+        <h2 class="form-heading">Generate a content pack</h2>
+        <p class="form-intro">Enter a topic and choose a platform.</p>
+
+        <form action="{% if current_user.is_authenticated %}{{ url_for('generate') }}{% else %}{{ url_for('generate_demo') }}{% endif %}" method="post" data-loading-text="Generating content pack...">
+            <div class="field">
+                <label for="topic">Topic</label>
+                <input type="text" id="topic" name="topic" class="input" placeholder="artificial intelligence for healthcare" required>
+            </div>
+
+            <div class="field">
+                <label for="platform">Platform</label>
+                <select id="platform" name="platform" class="select" required>
+                    <option value="twitter">Twitter</option>
+                    <option value="instagram">Instagram</option>
+                    <option value="tiktok">TikTok</option>
+                    <option value="linkedin">LinkedIn</option>
+                    <option value="youtube">YouTube</option>
+                    <option value="facebook">Facebook</option>
+                    <option value="pinterest">Pinterest</option>
+                </select>
+            </div>
+
+            <div class="stack-actions">
+                <button type="submit" class="button">{% if current_user.is_authenticated %}Generate{% else %}Generate Demo{% endif %}</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

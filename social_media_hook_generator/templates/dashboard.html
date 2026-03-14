@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Social Media Hook Generator{% endblock %}
+
+{% block content %}
+<section class="section single-column">
+    <div class="panel compact-form" data-reveal>
+        <div class="eyebrow">Dashboard</div>
+        <h2 class="form-heading">Saved packs</h2>
+        <p class="form-intro">{{ content_packs|length }} saved</p>
+    </div>
+</section>
+
+<section class="section pack-stack">
+    {% if content_packs %}
+        {% for pack in content_packs %}
+        {% set platforms = pack.parsed_content.get('platforms', {}) %}
+        <article class="pack-card" data-reveal>
+            <div class="pack-header">
+                <div>
+                    <span class="platform-pill">{{ pack.platform or 'Saved Pack' }}</span>
+                    <h3 class="form-heading" style="margin-top: 14px;">{{ pack.topic }}</h3>
+                    <p class="microcopy">Saved {{ pack.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+                </div>
+                <div class="stack-actions">
+                    <button onclick="showContentPack({{ pack.id }})" class="button">View pack</button>
+                    <form action="{{ url_for('delete_pack', pack_id=pack.id) }}" method="post" data-loading-text="Deleting content pack..." onsubmit="return confirm('Delete this content pack?')">
+                        <button type="submit" class="button-ghost">Delete</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="pack-preview-grid">
+                {% for platform_name, content in platforms.items() %}
+                <section class="content-panel">
+                    <span class="card-label">{{ platform_name }}</span>
+                    <strong>{{ content.hook[:54] }}{% if content.hook|length > 54 %}...{% endif %}</strong>
+                    <p class="preview-snippet">{{ content.body[:88] }}{% if content.body|length > 88 %}...{% endif %}</p>
+                </section>
+                {% endfor %}
+            </div>
+        </article>
+        {% endfor %}
+    {% else %}
+    <div class="pack-card empty-state" data-reveal>
+        <span class="card-label">No Saved Packs</span>
+        <h3 class="form-heading">Generate something worth keeping.</h3>
+        <p>Your dashboard is empty. Use the main generator, save a pack, and it will appear here with the new preview layout.</p>
+        <a href="{{ url_for('index') }}" class="button">Open generator</a>
+    </div>
+    {% endif %}
+</section>
+
+<div id="contentModal" class="modal">
+    <div class="modal-card">
+        <div class="pack-header">
+            <div>
+                <span class="platform-pill">Saved Pack</span>
+                <h3 class="form-heading" id="modalTitle" style="margin-top: 14px;"></h3>
+            </div>
+            <button type="button" class="button-ghost modal-close" onclick="closeModal()">X</button>
+        </div>
+        <div id="modalContent" class="content-stack"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showContentPack(packId) {
+    fetch(`/api/content_pack/${packId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            document.getElementById('modalTitle').textContent = data.topic;
+            const content = document.getElementById('modalContent');
+            content.innerHTML = '';
+
+            Object.entries(data.content.platforms).forEach(([platform, details]) => {
+                const wrapper = document.createElement('article');
+                wrapper.className = 'content-card';
+
+                const hashtags = Array.isArray(details.hashtags) ? details.hashtags : [];
+                const hashtagMarkup = hashtags.map(tag => `<span class="hashtag">${tag}</span>`).join('');
+
+                wrapper.innerHTML = `
+                    <div class="content-header">
+                        <div>
+                            <span class="platform-pill">${platform}</span>
+                            <h4 class="form-heading" style="margin-top: 14px;">${details.hook}</h4>
+                        </div>
+                    </div>
+                    <div class="content-grid">
+                        <section class="content-panel">
+                            <span class="card-label">Hook</span>
+                            <p class="copy">${details.hook}</p>
+                        </section>
+                        <section class="content-panel">
+                            <span class="card-label">Body</span>
+                            <p class="copy">${details.body}</p>
+                        </section>
+                    </div>
+                    <section class="content-panel" style="margin-top: 16px;">
+                        <span class="card-label">Hashtags</span>
+                        <div class="hashtag-list" style="margin-top: 12px;">${hashtagMarkup}</div>
+                    </section>
+                `;
+                content.appendChild(wrapper);
+            });
+
+            document.getElementById('contentModal').classList.add('is-open');
+        });
+}
+
+function closeModal() {
+    document.getElementById('contentModal').classList.remove('is-open');
+}
+
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') {
+        closeModal();
+    }
+});
+</script>
+{% endblock %}
