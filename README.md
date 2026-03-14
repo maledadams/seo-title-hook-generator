@@ -1,4 +1,4 @@
-# Social Media Hook Generator
+# SEO Social Media Hook Generator
 
 A small Flask app for generating social media content packs from one topic.
 
