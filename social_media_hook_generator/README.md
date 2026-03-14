@@ -67,6 +67,12 @@ GOOGLE_API_KEY=your_google_api_key
 SECRET_KEY=your_secret_key
 ```
 
+Generate a secret key with:
+
+```bash
+python generate_secret.py
+```
+
 Optional:
 
 ```env
@@ -79,7 +85,6 @@ Notes:
 
 - If `GOOGLE_API_KEY` is missing or the model call fails, the app still works using local fallback content.
 - SQLite is used automatically if `DATABASE_URL` is empty.
-- `.env` is ignored by git.
 - `instance/` is used for local app data such as the SQLite database.
 
 ## Run Locally
