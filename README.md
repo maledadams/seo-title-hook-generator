@@ -1,54 +1,171 @@
-# SEO Title and Hook Rewriter
+# Social Media Hook Generator
 
-A single file Streamlit app that rewrites titles and proposes short hooks from a CSV. It scores each candidate and lets you export two CSVs you can hand to an editor or a client.
+A small Flask app for generating social media content packs from one topic.
 
-## What it does
-- Reads a CSV with three headers: `topic`, `current_title`, `keywords`
-- Generates fresh title candidates from clean patterns tied to your topic and keywords
-- Scores each candidate and shows the sub scores
-- Prints hook lines you can paste into intros or scripts
-- Exports a top picks CSV and a full candidates CSV
+It is built as a homework learning project, not a marketing website. The UI is intentionally simple: one main generator, a result page, login/register pages, and a small dashboard for saved packs.
 
-## Who this is for
-- People who run channels or blogs and want faster title reviews
-- Editors who need a consistent bar during feedback
-- Candidates who want a working demo to show in an interview
+## What It Does
 
-## How scoring works
-The app normalizes each title then computes six pieces. Final score is a weighted blend. These weights match the code in this repo.
+- Takes a topic and a primary platform
+- Generates a content pack for 7 platforms: Twitter, Instagram, TikTok, LinkedIn, YouTube, Facebook, and Pinterest
+- Returns 3 fields per platform: `hook`, `body`, and `hashtags`
+- Lets logged-in users save generated packs
+- Shows loading feedback while forms are submitting
+- Falls back to template-based output if Gemini is unavailable or returns invalid JSON
 
-- **Keyword coverage** matches against the `keywords` cell. Weight 0.25
-- **Length fit** uses a soft range with a sweet spot for readability. Weight 0.22
-- **Novelty vs current** compares tokens against `current_title`. Weight 0.20
-- **Power words** checks a safe list like easy, proven, best, fast. Weight 0.18
-- **No shouting** applies a light penalty for long ALL CAPS tokens. Weight 0.10
-- **No redundancy** trims score when words repeat. Weight 0.05
+## Stack
 
-Each row shows the final score and the six sub scores so you can explain picks in review.
+- Python
+- Flask
+- Flask-Login
+- Flask-SQLAlchemy
+- Google GenAI SDK
+- SQLite by default
+- Plain HTML templates + CSS
 
-## Run it locally
-in the folder there is a file named Start-App, click on it and wait for the dependencies to download then open the browser at `http://localhost:8501`
+## Project Structure
 
-## CSV format
-`keywords` is a comma separated list in a single cell.
-
-```csv
-topic,current_title,keywords
-YouTube SEO,My YouTube SEO is not working,youtube seo,video titles,watch time
-Instagram Reels Hooks,How to write hooks for IG reels,instagram hooks,shorts scripts,engagement
+```text
+social_media_hook_generator/
+|-- app.py
+|-- requirements.txt
+|-- .env.example
+|-- .gitignore
+|-- Start-App.cmd
+|-- test_env.py
+|-- templates/
+|   |-- base.html
+|   |-- index.html
+|   |-- login.html
+|   |-- register.html
+|   |-- generate.html
+|   |-- dashboard.html
+|-- static/
+|   |-- styles.css
+|-- instance/
+|   |-- social_media.db
 ```
 
-## Limits
-- CSV must include the three headers exactly
-- Titles come from templates and may need small edits for brand voice
-- Power words list is short by design
-- Scores guide review and are not a promise of CTR gains
+## Environment Variables
 
-## Roadmap
-- Per niche power words and templates
-- Brand terms field that forces required words
-- Weight presets per platform
-- PDF one pager per row that explains top picks
+Create a `.env` file in this folder.
 
-## License
-MIT
+Required:
+
+```env
+GOOGLE_API_KEY=your_google_api_key
+SECRET_KEY=your_secret_key
+```
+
+Generate a secret key with:
+
+```bash
+python generate_secret.py
+```
+
+Optional:
+
+```env
+TWITTER_BEARER_TOKEN=your_twitter_token
+DATABASE_URL=
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+Notes:
+
+- If `GOOGLE_API_KEY` is missing or the model call fails, the app still works using local fallback content.
+- SQLite is used automatically if `DATABASE_URL` is empty.
+- `instance/` is used for local app data such as the SQLite database.
+
+## Run Locally
+
+### Windows
+
+From the `social_media_hook_generator` folder:
+
+```bat
+Start-App.cmd
+```
+
+Or manually:
+
+```bat
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python app.py
+```
+
+### macOS / Linux
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+
+Open:
+
+```text
+http://127.0.0.1:5000
+```
+
+## How To Use
+
+1. Open the home page.
+2. Enter a topic.
+3. Pick the main platform.
+4. Click generate.
+5. Review the content pack.
+6. Register/login if you want to save it.
+
+## Example Output Shape
+
+```json
+{
+  "topic": "artificial intelligence",
+  "platforms": {
+    "twitter": {
+      "hook": "What's your take on artificial intelligence?",
+      "body": "Just dropped a thread about artificial intelligence. What are your thoughts?",
+      "hashtags": ["#artificialintelligence", "#Twitter", "#SocialMedia"]
+    },
+    "instagram": {
+      "hook": "artificial intelligence in focus",
+      "body": "Exploring artificial intelligence in depth. What stands out to you most?",
+      "hashtags": ["#artificialintelligence", "#Instagram", "#Content"]
+    }
+  }
+}
+```
+
+## Main Behavior
+
+- `GET /` shows the generator
+- `POST /generate_demo` generates a pack without login
+- `POST /generate` generates a pack for logged-in users
+- `POST /save_pack` saves a pack
+- `GET /dashboard` shows saved packs
+- `GET /api/content_pack/<id>` returns saved pack JSON
+- `POST /delete_pack/<id>` deletes a saved pack
+
+## Testing
+
+Basic checks:
+
+```bash
+python test_env.py
+python -m py_compile app.py
+```
+
+## Publishing To GitHub
+
+Before pushing:
+
+- Keep `.env` out of git
+- Keep `instance/` out of git
+- Keep `instance/social_media.db` out of git
+- Rotate any API keys that were exposed or shared
+- Commit `.env.example`, not `.env`
+- Check `git status` before pushing
