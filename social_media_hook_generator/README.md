@@ -41,7 +41,6 @@ social_media_hook_generator/
 |-- .env.example
 |-- .gitignore
 |-- Start-App.cmd
-|-- setup.bat
 |-- test_env.py
 |-- templates/
 |   |-- base.html

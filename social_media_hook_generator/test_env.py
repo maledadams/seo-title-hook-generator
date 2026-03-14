@@ -62,7 +62,7 @@ def test_env_vars():
         print("You can now run: python app.py")
     else:
         print("Please set the missing required variables in your .env file.")
-        print("Check SETUP_GUIDE.md for instructions.")
+        print("Check README.md for instructions.")
 
 
 if __name__ == "__main__":
