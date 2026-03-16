@@ -2,7 +2,7 @@
 
 A small Flask app for generating social media content packs from one topic.
 
-It is built as a homework learning project, not a marketing website. The UI is intentionally simple: one main generator, a result page, login/register pages, and a small dashboard for saved packs.
+A tool that generates engaging SEO titles based from captions and hashtags currently trending. The project explores automated content generation techniques to help creators produce click-optimized headlines.
 
 ## What It Does
 
