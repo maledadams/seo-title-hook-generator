@@ -23,6 +23,18 @@ A tool that generates engaging SEO titles based from captions and hashtags curre
 - SQLite by default
 - Plain HTML templates + CSS
 
+## Input
+
+### keyword: AI coding tools
+
+### Generated content:
+
+Hook
+Tired of repetitive coding tasks? 😩
+
+Body
+AI coding tools are here to revolutionize your workflow! From intelligent code completion to automated debugging, they're boosting developer productivity & slashing dev time. What's your go-to AI assistant for coding? Let's discuss! 👇
+
 ## Project Structure
 
 ```text
@@ -150,22 +162,3 @@ http://127.0.0.1:5000
 - `GET /api/content_pack/<id>` returns saved pack JSON
 - `POST /delete_pack/<id>` deletes a saved pack
 
-## Testing
-
-Basic checks:
-
-```bash
-python test_env.py
-python -m py_compile app.py
-```
-
-## Publishing To GitHub
-
-Before pushing:
-
-- Keep `.env` out of git
-- Keep `instance/` out of git
-- Keep `instance/social_media.db` out of git
-- Rotate any API keys that were exposed or shared
-- Commit `.env.example`, not `.env`
-- Check `git status` before pushing
