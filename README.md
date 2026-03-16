@@ -25,9 +25,9 @@ A tool that generates engaging SEO titles based from captions and hashtags curre
 
 ## Input
 
-### keyword: AI coding tools
+#### keyword: AI coding tools
 
-### Generated content:
+Generated content:
 
 Hook
 Tired of repetitive coding tasks? 😩
