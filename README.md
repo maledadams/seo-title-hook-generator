@@ -23,16 +23,15 @@ A tool that generates engaging SEO titles based from captions and hashtags curre
 - SQLite by default
 - Plain HTML templates + CSS
 
-## Input
+## Input:
+Keyword: AI coding tools
 
-#### keyword: AI coding tools
+## Output: 
 
-Generated content:
-
-Hook
+#### Hook: 
 Tired of repetitive coding tasks? 😩
 
-Body
+#### Body:
 AI coding tools are here to revolutionize your workflow! From intelligent code completion to automated debugging, they're boosting developer productivity & slashing dev time. What's your go-to AI assistant for coding? Let's discuss! 👇
 
 ## Project Structure
